@@ -1,3 +1,4 @@
+import 'package:cityscope_task/pages/home/controller/home.controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -6,10 +7,11 @@ class SearchWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const SizedBox(
+    return SizedBox(
       height: 75,
       child: TextField(
-        decoration: InputDecoration(
+        onChanged: ref.read(homeControllerProvider.notifier).searchArtWork,
+        decoration: const InputDecoration(
           prefixIcon: Icon(
             Icons.search,
             color: Colors.black,

@@ -1,18 +1,41 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cityscope_task/pages/details/view/detail.view.dart';
+import 'package:cityscope_task/pages/home/view/home.view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ArtWorkCard extends ConsumerWidget {
-  const ArtWorkCard({super.key});
+  final int id;
+  final String artName;
+  final String artist;
+  final String artCategory;
+  final String artworkUrl;
+  final String description;
+  const ArtWorkCard({
+    super.key,
+    required this.id,
+    required this.artName,
+    required this.artist,
+    required this.artCategory,
+    required this.artworkUrl,
+    required this.description,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //250*360 -> w*h
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const DetailView(),
-        ),
+      onTap: () => context.go(
+        '/${DetailView.name}',
+        extra: {
+          'id': id,
+          'artName': artName,
+          'artist': artist,
+          'artCategory': artCategory,
+          'artworkUrl': artworkUrl,
+          'description': description,
+        },
       ),
       child: Container(
         // width: 160,
@@ -33,10 +56,10 @@ class ArtWorkCard extends ConsumerWidget {
                   width: 0.1,
                   color: Colors.grey,
                 ),
-                image: const DecorationImage(
+                image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage(
-                    'https://indianexpress.com/wp-content/uploads/2016/07/vangogh_759-1.jpg',
+                  image: CachedNetworkImageProvider(
+                    artworkUrl,
                   ),
                 ),
               ),
@@ -51,9 +74,10 @@ class ArtWorkCard extends ConsumerWidget {
                       color: Colors.white,
                     ),
                   ),
-                  child: const Text(
-                    'Painting',
-                    style: TextStyle(
+                  child: Text(
+                    artCategory,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,
                       letterSpacing: 0.7,
@@ -64,28 +88,32 @@ class ArtWorkCard extends ConsumerWidget {
               ),
             ),
             Container(
-              child: const Column(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 8,
                   ),
                   Text(
-                    'The Starry Night',
-                    style: TextStyle(
+                    artName,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
                       fontSize: 18,
                       letterSpacing: 0.7,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                   Text(
-                    'Vincent van Gogh',
-                    style: TextStyle(
+                    artist.split(',').first,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
                       fontSize: 12,
                       letterSpacing: 0.7,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
-                  SizedBox(),
                 ],
               ),
             )

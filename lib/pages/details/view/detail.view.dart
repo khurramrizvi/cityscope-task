@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DetailView extends ConsumerWidget {
-  const DetailView({super.key});
+  static const String name = 'detail';
+  final Map<String, dynamic> args;
+  const DetailView(this.args, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -13,8 +16,8 @@ class DetailView extends ConsumerWidget {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: const NetworkImage(
-              'https://indianexpress.com/wp-content/uploads/2016/07/vangogh_759-1.jpg',
+            image: CachedNetworkImageProvider(
+              args['artworkUrl'],
             ),
             colorFilter: ColorFilter.mode(
               Colors.grey.withOpacity(0.4),
@@ -64,12 +67,14 @@ class DetailView extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        const Text(
-                          'The Starry Night',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 24,
+                        Flexible(
+                          child: Text(
+                            args['artName'],
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 24,
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -84,9 +89,9 @@ class DetailView extends ConsumerWidget {
                               color: Colors.white,
                             ),
                           ),
-                          child: const Text(
-                            ' Panting ',
-                            style: TextStyle(
+                          child: Text(
+                            ' ${args['artCategory']} ',
+                            style: const TextStyle(
                               color: Colors.black87,
                               fontSize: 12,
                               //letterSpacing: 0.5,
@@ -99,11 +104,11 @@ class DetailView extends ConsumerWidget {
                     const SizedBox(
                       height: 2,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 22.0),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 22.0),
                       child: Text(
-                        '- Vincent van Gogh',
-                        style: TextStyle(
+                        '- ${args['artist']} ',
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w400,
                           fontSize: 16,
@@ -114,13 +119,15 @@ class DetailView extends ConsumerWidget {
                     const SizedBox(
                       height: 8,
                     ),
-                    const Wrap(
+                    Wrap(
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(right: 20.0),
+                          padding: const EdgeInsets.only(right: 20.0),
                           child: Text(
-                            'The Starry Night is an oil on canvas painting by Dutch Post-Impressionist painter Vincent van Gogh. Painted in June 1889, it depicts the view from the east-facing window of his asylum room at Saint-Rémy-de-Provence, just before sunrise, with the addition of an imaginary village.',
-                            style: TextStyle(
+                            args['description']
+                              ..toString()
+                              ..replaceAll(r'<[^>]*>|<.*?>', ''),
+                            style: const TextStyle(
                               color: Colors.white,
                               // fontWeight: FontWeight.w400,
                               fontSize: 13,
