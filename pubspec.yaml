@@ -29,9 +29,10 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
-    sdk: flutter
+    sdk: flutter  
 
-  
+  cupertino_icons: ^1.0.6
+
   #routing
   go_router: ^13.1.0
 
@@ -41,8 +42,10 @@ dependencies:
   #api calls
   dio: ^5.4.0
 
-
-
+  shimmer: ^3.0.0
+  dio_cache_interceptor: ^3.5.0
+  cached_network_image: ^3.3.1
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -55,8 +58,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   json_serializable: ^6.7.1
-  shimmer: ^3.0.0
-  dio_cache_interceptor: ^3.5.0
+  
 
 
 
