@@ -16,6 +16,7 @@ https://api.artic.edu/docs/#collections
 3. Dio
 4. APIs 
 5. Clean Project Structue
+6. GoRouter
 
 ## Feature List
 1. Pixel Perfect UI
@@ -24,6 +25,7 @@ https://api.artic.edu/docs/#collections
 4. Minimal 3rd party dependencies
 5. Riverpod based state management
 6. API caching on Isar Store
+7. Artwork File Download
 
 ## Screenshots
 | Loading   | Home Screen   | Detailed Screen                                |
