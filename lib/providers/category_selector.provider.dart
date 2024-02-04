@@ -7,7 +7,7 @@ final categorySelectorProvider = NotifierProvider<CategorySelector, int>(() {
 class CategorySelector extends Notifier<int> {
   @override
   int build() {
-    return 0;
+    return -1;
   }
 
   selectIndex(int value) {

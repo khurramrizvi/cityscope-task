@@ -10,6 +10,8 @@ class SearchWidget extends ConsumerWidget {
     return SizedBox(
       height: 75,
       child: TextField(
+        controller:
+            ref.read(homeControllerProvider.notifier).searchBoxController,
         onChanged: ref.read(homeControllerProvider.notifier).searchArtWork,
         decoration: const InputDecoration(
           prefixIcon: Icon(

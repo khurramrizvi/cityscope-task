@@ -1,10 +1,14 @@
-import 'package:cityscope_task/pages/home/view/home.view.dart';
 import 'package:cityscope_task/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+late String tempPath;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  tempPath = (await getTemporaryDirectory()).path;
   runApp(
     const ProviderScope(
       child: MyApp(),

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cityscope_task/pages/home/controller/home.controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +21,7 @@ class DetailView extends ConsumerWidget {
               args['artworkUrl'],
             ),
             colorFilter: ColorFilter.mode(
-              Colors.grey.withOpacity(0.4),
+              Colors.black.withOpacity(0.4),
               BlendMode.darken,
             ),
           ),
@@ -46,22 +47,37 @@ class DetailView extends ConsumerWidget {
                     ),
                   ),
                 ),
-                trailing: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Colors.white.withOpacity(0.75),
-                  ),
-                  child: const Icon(
-                    CupertinoIcons.arrow_down_to_line,
-                    color: Colors.black,
-                    size: 18,
+                trailing: GestureDetector(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Download Started!'),
+                        duration: Duration(seconds: 1),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                    ref.read(homeControllerProvider.notifier).downloadArtWork(
+                          id: args['id'],
+                          url: args['artworkUrl'],
+                        );
+                  },
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: Colors.white.withOpacity(0.75),
+                    ),
+                    child: const Icon(
+                      CupertinoIcons.arrow_down_to_line,
+                      color: Colors.black,
+                      size: 18,
+                    ),
                   ),
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -102,10 +118,10 @@ class DetailView extends ConsumerWidget {
                       ],
                     ),
                     const SizedBox(
-                      height: 2,
+                      height: 1,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 22.0),
+                      padding: const EdgeInsets.only(left: 10.0),
                       child: Text(
                         '- ${args['artist']} ',
                         style: const TextStyle(
@@ -125,8 +141,9 @@ class DetailView extends ConsumerWidget {
                           padding: const EdgeInsets.only(right: 20.0),
                           child: Text(
                             args['description']
-                              ..toString()
-                              ..replaceAll(r'<[^>]*>|<.*?>', ''),
+                                .toString()
+                                .replaceAll(RegExp(r'<[^>]*>'), ''),
+                            maxLines: 10,
                             style: const TextStyle(
                               color: Colors.white,
                               // fontWeight: FontWeight.w400,
