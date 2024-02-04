@@ -24,7 +24,6 @@ class MyApp extends ConsumerWidget {
     final router = ref.watch(routesProvider).router;
     return MaterialApp.router(
       routerConfig: router,
-
       theme: ThemeData(
         textTheme: GoogleFonts.muktaMalarTextTheme(),
       ),

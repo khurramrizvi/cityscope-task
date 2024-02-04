@@ -2,7 +2,7 @@
      <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="cityscope_task"
-        android:name="${applicationName}"
+        android:name="ArtWorks"
         android:icon="@mipmap/ic_launcher">
         
         <activity
