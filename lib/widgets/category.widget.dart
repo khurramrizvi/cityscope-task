@@ -50,6 +50,9 @@ class CategoryList extends ConsumerWidget {
                 ref.read(homeControllerProvider.notifier).filterList(
                       categories[index],
                     );
+              } else {
+                ref.read(categorySelectorProvider.notifier).selectIndex(-1);
+                ref.read(homeControllerProvider.notifier).filterList(null);
               }
             },
           );

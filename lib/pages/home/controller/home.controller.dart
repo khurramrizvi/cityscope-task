@@ -1,6 +1,7 @@
 import 'package:cityscope_task/http/services/artwork.service.dart';
 import 'package:cityscope_task/pages/home/model/artwork_model.dart';
 import 'package:cityscope_task/providers/category_list.provider.dart';
+import 'package:cityscope_task/providers/category_selector.provider.dart';
 import 'package:cityscope_task/providers/loading.provider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -87,6 +88,7 @@ class HomeController extends AsyncNotifier<List<ArtWorkData>?> {
   //search the artwork based on name of artist and artwork
   void searchArtWork(String searchQuery) {
     try {
+      ref.read(categorySelectorProvider.notifier).selectIndex(-1);
       if (searchQuery.isEmpty) {
         state = AsyncData(artList);
       }
@@ -109,8 +111,12 @@ class HomeController extends AsyncNotifier<List<ArtWorkData>?> {
   }
 
   //filters the artwork
-  void filterList(String selectedFilter) {
+  void filterList(String? selectedFilter) {
     try {
+      if (selectedFilter == null) {
+        state = AsyncValue.data(artList);
+        return;
+      }
       state = AsyncValue.data(
         artList
             ?.where((element) => element.artworkTypeTitle == selectedFilter)

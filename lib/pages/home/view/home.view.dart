@@ -1,6 +1,7 @@
 import 'package:cityscope_task/pages/home/controller/home.controller.dart';
 import 'package:cityscope_task/providers/category_list.provider.dart'
     as categoryProvider;
+import 'package:cityscope_task/providers/category_selector.provider.dart';
 import 'package:cityscope_task/providers/loading.provider.dart';
 import 'package:cityscope_task/widgets/artwork_card.widget.dart';
 import 'package:cityscope_task/widgets/category.widget.dart';
@@ -25,6 +26,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
       ref.read(homeControllerProvider.notifier).getArtWorkList();
       controller.addListener(() async {
         if (!ref.watch(isLoadingProvider)) {
+          ref.read(categorySelectorProvider.notifier).selectIndex(-1);
           if (controller.offset >= controller.position.maxScrollExtent) {
             await ref.read(homeControllerProvider.notifier).getMoreArtWorks();
           }
@@ -68,26 +70,55 @@ class _HomeViewState extends ConsumerState<HomeView> {
             ),
             ref.watch(homeControllerProvider).when(
                   data: (data) => Expanded(
-                    child: GridView.builder(
-                      controller: controller,
-                      //  physics: AlwaysScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 20,
-                        mainAxisSpacing: 20,
-                        mainAxisExtent: 220,
+                    child: Visibility(
+                      visible: data?.isNotEmpty ?? false,
+                      replacement: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.black.withOpacity(0.9),
+                              radius: 80,
+                              child: Icon(
+                                Icons.photo_outlined,
+                                size: 80,
+                                color: Colors.white.withOpacity(0.65),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            const Text(
+                              'Not Artworks found',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      itemCount: data?.length ?? 0,
-                      itemBuilder: (context, index) => ArtWorkCard(
-                        id: data![index].id!,
-                        artName: data[index].title!,
-                        artCategory: data[index].artworkTypeTitle!,
-                        artworkUrl:
-                            'https://www.artic.edu/iiif/2/${data[index].imageId}/full/843,/0/default.jpg',
-                        artist: data[index].artistTitles!.first,
-                        description: data[index].description ?? '',
+                      child: GridView.builder(
+                        controller: controller,
+                        //  physics: AlwaysScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 20,
+                          mainAxisExtent: 220,
+                        ),
+                        itemCount: data?.length ?? 0,
+                        itemBuilder: (context, index) => ArtWorkCard(
+                          id: data![index].id!,
+                          artName: data[index].title!,
+                          artCategory: data[index].artworkTypeTitle!,
+                          artworkUrl:
+                              'https://www.artic.edu/iiif/2/${data[index].imageId}/full/843,/0/default.jpg',
+                          artist: data[index].artistTitles!.first,
+                          description: data[index].description ?? '',
+                        ),
                       ),
                     ),
                   ),
