@@ -85,13 +85,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         artName: data[index].title!,
                         artCategory: data[index].artworkTypeTitle!,
                         artworkUrl:
-                            'https://www.artic.edu/iiif/2/${data![index].imageId}/full/843,/0/default.jpg',
+                            'https://www.artic.edu/iiif/2/${data[index].imageId}/full/843,/0/default.jpg',
                         artist: data[index].artistTitles!.first,
                         description: data[index].description ?? '',
                       ),
                     ),
                   ),
-                  loading: () => Expanded(child: HomeShimmer()),
+                  loading: () => const Expanded(child: HomeShimmer()),
                   error: (error, stackTrace) => const Center(
                     child: Text('Some Error Occurred'),
                   ),

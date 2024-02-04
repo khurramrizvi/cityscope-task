@@ -80,7 +80,7 @@ class HomeController extends AsyncNotifier<List<ArtWorkData>?> {
         }
       }
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 
