@@ -1,16 +1,31 @@
-# cityscope_task
+# ArtWorks
 
-A new Flutter project.
+Artworks is a flutter application.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is a challenge app by CityScope.
 
-A few resources to get you started if this is your first Flutter project:
+### API
+#### Art Institute of Chicago Apis
+https://api.artic.edu/docs/#collections
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Technicals
+1. Flutter
+2. Riverpod
+3. Dio
+4. APIs 
+5. Clean Project Structue
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Feature List
+1. Pixel Perfect UI
+2. API Integration
+3. Paginated APIs
+4. Minimal 3rd party dependencies
+5. Riverpod based state management
+6. API caching on Isar Store
+
+## Screenshots
+| Loading   | Home Screen   | Detailed Screen                                |
+|---        |---            |---|
+| <img src="ss/s1.png">  | <img src="ss/s2.png">   | <img src="ss/s3.png">   |
