@@ -8,12 +8,13 @@ class Http {
     ..interceptors.add(
       DioCacheInterceptor(
         options: CacheOptions(
-          maxStale: const Duration(hours: 1),
+          maxStale: const Duration(hours: 12),
           store: IsarCacheStore(tempPath),
-          policy: CachePolicy.forceCache,
+          policy: CachePolicy.request,
         ),
       ),
     );
+
   static Dio get artworkEndpoint => _dio
     ..interceptors.addAll([
       InterceptorsWrapper(

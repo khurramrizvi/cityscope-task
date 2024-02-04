@@ -1,6 +1,7 @@
 import 'package:cityscope_task/pages/home/controller/home.controller.dart';
 import 'package:cityscope_task/providers/category_list.provider.dart'
     as categoryProvider;
+import 'package:cityscope_task/providers/loading.provider.dart';
 import 'package:cityscope_task/widgets/artwork_card.widget.dart';
 import 'package:cityscope_task/widgets/category.widget.dart';
 import 'package:cityscope_task/widgets/home_shimmer.widget.dart';
@@ -21,26 +22,21 @@ class _HomeViewState extends ConsumerState<HomeView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.watch(homeControllerProvider.notifier).getArtWorkList();
+      ref.read(homeControllerProvider.notifier).getArtWorkList();
+      controller.addListener(() async {
+        if (!ref.watch(isLoadingProvider)) {
+          if (controller.offset >= controller.position.maxScrollExtent) {
+            await ref.read(homeControllerProvider.notifier).getMoreArtWorks();
+          }
+        }
+      });
     });
+
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      controller.addListener(() async {
-        if (controller.offset >= controller.position.maxScrollExtent) {
-          await ref.read(homeControllerProvider.notifier).getMoreArtWorks();
-        }
-      });
-    });
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final artList = ref.watch(homeControllerProvider);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -70,33 +66,43 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   ? 0
                   : 16,
             ),
-            artList.when(
-              data: (data) => Expanded(
-                child: GridView.builder(
-                  controller: controller,
-                  //  physics: AlwaysScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20,
-                    mainAxisExtent: 220,
+            ref.watch(homeControllerProvider).when(
+                  data: (data) => Expanded(
+                    child: GridView.builder(
+                      controller: controller,
+                      //  physics: AlwaysScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 20,
+                        mainAxisSpacing: 20,
+                        mainAxisExtent: 220,
+                      ),
+                      itemCount: data?.length ?? 0,
+                      itemBuilder: (context, index) => ArtWorkCard(
+                        id: data![index].id!,
+                        artName: data[index].title!,
+                        artCategory: data[index].artworkTypeTitle!,
+                        artworkUrl:
+                            'https://www.artic.edu/iiif/2/${data![index].imageId}/full/843,/0/default.jpg',
+                        artist: data[index].artistTitles!.first,
+                        description: data[index].description ?? '',
+                      ),
+                    ),
                   ),
-                  itemCount: artList.value?.length ?? 0,
-                  itemBuilder: (context, index) => ArtWorkCard(
-                    id: artList.value![index].id!,
-                    artName: artList.value![index].title!,
-                    artCategory: artList.value![index].artworkTypeTitle!,
-                    artworkUrl:
-                        'https://www.artic.edu/iiif/2/${artList.value![index].imageId}/full/843,/0/default.jpg',
-                    artist: artList.value![index].artistTitles!.first,
-                    description: artList.value![index].description ?? '',
+                  loading: () => Expanded(child: HomeShimmer()),
+                  error: (error, stackTrace) => const Center(
+                    child: Text('Some Error Occurred'),
                   ),
                 ),
-              ),
-              loading: () => Expanded(child: HomeShimmer()),
-              error: (error, stackTrace) => const Center(
-                child: Text('Some Error Occurred'),
+            Visibility(
+              visible: ref.read(isLoadingProvider),
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                ),
               ),
             ),
           ],

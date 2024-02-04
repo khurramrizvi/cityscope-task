@@ -1,6 +1,7 @@
 import 'package:cityscope_task/http/services/artwork.service.dart';
 import 'package:cityscope_task/pages/home/model/artwork_model.dart';
 import 'package:cityscope_task/providers/category_list.provider.dart';
+import 'package:cityscope_task/providers/loading.provider.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -72,8 +73,10 @@ class HomeController extends AsyncNotifier<List<ArtWorkData>?> {
                   .toList())
             ],
           );
+
           artList = state.value;
           ref.read(categoryListProvider.notifier).generateList(artList!);
+          ref.read(isLoadingProvider.notifier).toggleLoading();
         }
       }
     } catch (e) {
@@ -126,6 +129,7 @@ class HomeController extends AsyncNotifier<List<ArtWorkData>?> {
   //on scroll of page
   Future getMoreArtWorks() async {
     try {
+      ref.read(isLoadingProvider.notifier).toggleLoading();
       page++;
       await getArtWorkList(isGetMore: true);
     } catch (e) {}
